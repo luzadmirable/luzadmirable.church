@@ -4,8 +4,14 @@ import { Pool } from "pg";
 import * as schema from "./schema";
 
 if (!process.env.DATABASE_URL) {
+  // El build prerenderiza las páginas de los documentos, así que necesita la
+  // base también al construir, no solo al servir. Fallar aquí es deliberado:
+  // sin esto el sitio se publicaría vacío y en silencio.
   throw new Error(
-    "Falta DATABASE_URL. Ejecuta `neon env pull` o pega la connection string en .env.local.",
+    "Falta DATABASE_URL.\n" +
+      "  · En local:  npx neon@latest env pull\n" +
+      "  · En Vercel: Storage → Neon, que la inyecta sola en el proyecto.\n" +
+      "    Recuerda definir también ADMIN_PASSWORD y SESSION_SECRET.",
   );
 }
 
