@@ -1,7 +1,8 @@
 import type { TreeNode } from "@/lib/tree";
 
 /**
- * Índice del documento. Solo capítulos y artículos; los incisos no entran.
+ * Índice del documento. Solo capítulos y artículos con título; los incisos no
+ * entran, y los apartados mudos tampoco.
  *
  * Un glosario se indexa por letra, no por entrada: cuando todos los apartados
  * de primer nivel son una sola letra, el índice se dibuja como abecedario en
@@ -80,7 +81,13 @@ export function DocumentOutline({ tree }: { tree: TreeNode[] }) {
 }
 
 function collect(tree: TreeNode[]): TreeNode[] {
-  return tree.flatMap((node) =>
-    node.type === "clause" ? [] : [node, ...collect(node.children)],
-  );
+  return tree.flatMap((node) => {
+    if (node.type === "clause") return [];
+    const children = collect(node.children);
+    // Un apartado sin título no aporta nada a un índice: su entrada sería el
+    // número a solas, repetido tantas veces como párrafos tenga el capítulo.
+    // Se omite la entrada, no sus hijos: un apartado mudo puede tener debajo
+    // apartados que sí se titulan.
+    return node.title.trim() ? [node, ...children] : children;
+  });
 }
