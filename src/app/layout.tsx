@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Alegreya, Alegreya_Sans, Cinzel } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -44,6 +44,20 @@ export const metadata: Metadata = {
   },
   description:
     "Documentos normativos de la iglesia Luz Admirable: membresía y bases doctrinales.",
+};
+
+/**
+ * Safari móvil colapsa su barra superior al bajar y le entrega la pantalla
+ * entera al documento, con la barra de estado flotando encima. Sin un color
+ * declarado la deja translúcida y el texto se asoma por detrás del reloj.
+ * Declarado, pinta esa franja de color papel y la página vuelve a terminar
+ * donde parece que termina. Son los mismos valores que `--paper`.
+ */
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fefdf8" },
+    { media: "(prefers-color-scheme: dark)", color: "#15130e" },
+  ],
 };
 
 export default function RootLayout({
