@@ -73,7 +73,7 @@ export default async function HomePage() {
                         strokeLinejoin="round"
                         aria-hidden="true"
                       >
-                        <path d="M4 12h15M13 6l6 6-6 6" />
+                        <path d="M9 5l7 7-7 7" />
                       </svg>
                     </Link>
                   </Reveal>
