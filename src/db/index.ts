@@ -10,8 +10,10 @@ if (!process.env.DATABASE_URL) {
   throw new Error(
     "Falta DATABASE_URL.\n" +
       "  · En local:  npx neon@latest env pull\n" +
-      "  · En Vercel: Storage → Neon, que la inyecta sola en el proyecto.\n" +
-      "    Recuerda definir también ADMIN_PASSWORD y SESSION_SECRET.",
+      "  · En Vercel: Settings → Environment Variables. Copia el valor de\n" +
+      "    .env.local y márcala en Production, Preview y Development.\n" +
+      "    Hacen falta también DATABASE_URL_UNPOOLED, ADMIN_PASSWORD y\n" +
+      "    SESSION_SECRET.",
   );
 }
 
