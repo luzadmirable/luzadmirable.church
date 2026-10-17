@@ -16,7 +16,8 @@
     "import:membresia": "node --env-file=.env.local --import tsx scripts/import-membresia.ts",
     "import:acuerdos": "node --env-file=.env.local --import tsx scripts/import-acuerdos.ts",
     "import:glosario": "node --env-file=.env.local --import tsx scripts/import-glosario.ts",
-    "ordenar": "node --env-file=.env.local --import tsx scripts/ordenar-documentos.ts"
+    "ordenar": "node --env-file=.env.local --import tsx scripts/ordenar-documentos.ts",
+    "import:confesion": "node --env-file=.env.local --import tsx scripts/import-confesion-1689.ts"
   },
   "dependencies": {
     "@neon/config": "^1.9.1",

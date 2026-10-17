@@ -20,6 +20,7 @@ const ORDEN = [
   "la-membresia-de-la-iglesia",
   "acuerdos-y-distintivos-doctrinales",
   "el-bautismo-en-agua",
+  "confesion-de-londres-1689",
   "glosario-de-terminos",
 ];
 
