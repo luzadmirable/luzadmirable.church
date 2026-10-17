@@ -6,21 +6,47 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "import:tratado": "node --env-file=.env.local --import tsx scripts/import-tratado.ts",
+    "import:bautismo": "node --env-file=.env.local --import tsx scripts/import-bautismo.ts",
+    "import:membresia": "node --env-file=.env.local --import tsx scripts/import-membresia.ts",
+    "import:acuerdos": "node --env-file=.env.local --import tsx scripts/import-acuerdos.ts",
+    "import:glosario": "node --env-file=.env.local --import tsx scripts/import-glosario.ts"
   },
   "dependencies": {
+    "@neon/config": "^1.9.1",
+    "@neon/env": "^1.6.2",
+    "@tiptap/extension-superscript": "^3.32.0",
+    "@tiptap/html": "^3.32.0",
+    "@tiptap/pm": "^3.32.0",
+    "@tiptap/react": "^3.32.0",
+    "@tiptap/starter-kit": "^3.32.0",
+    "@vercel/functions": "^3.10.1",
+    "drizzle-orm": "^0.45.4",
+    "jose": "^6.2.12",
     "next": "16.4.1",
+    "pg": "^8.23.1",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^18.0.8",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "16.4.1",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "wawoff2": "^2.0.1"
   }
 }

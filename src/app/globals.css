@@ -1,26 +1,715 @@
 @import "tailwindcss";
 
+/* Paleta de la línea Tito, muestreada de las portadas de serie: salvia y
+   oliva sobre pergamino, con la brasa del logotipo como único acento. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --paper: #fefdf8;
+  --surface: #fffffc;
+  --surface-2: #f8f6ec;
+  --ink: #191610;
+  --ink-soft: #54534a;
+  --ink-faint: #8a8775;
+  --rule: #e9e6d6;
+  --rule-soft: #f4f2e8;
+  --sage: #c0bb9c;
+  --sage-deep: #7d7a63;
+  --accent: #b63300;
+  --accent-soft: #fbede4;
+  --danger: #8c2f2f;
+  --danger-soft: #f8ebea;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Las curvas por defecto de CSS no tienen fuerza. La de cajón abre con
+     empuje; la de salida corta de golpe al cerrar. */
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+
+  --tab-size: 5.75rem;
+  --nav-w: 16.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #15130e;
+    --surface: #1e1b15;
+    --surface-2: #24211a;
+    --ink: #f3f0e4;
+    --ink-soft: #b8b4a2;
+    --ink-faint: #86826f;
+    --rule: #332f24;
+    --rule-soft: #282419;
+    --sage: #8e8a70;
+    --sage-deep: #b5b096;
+    /* El naranja vivo solo funciona sobre fondo oscuro; en claro no contrasta. */
+    --accent: #ff8106;
+    --accent-soft: #2a1a0e;
+    --danger: #e09a9a;
+    --danger-soft: #2e1c1c;
   }
 }
 
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-rule: var(--rule);
+  --color-rule-soft: var(--rule-soft);
+  --color-sage: var(--sage);
+  --color-sage-deep: var(--sage-deep);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+
+  --font-display: var(--font-cinzel), "Trajan Pro", Georgia, serif;
+  --font-sub: var(--font-alegreya), Georgia, serif;
+  /* Alegreya detrás de Kingred cubre ¿ ¡ — … , que la display no trae. */
+  --font-body: var(--font-kingred), var(--font-alegreya), Georgia, serif;
+  --font-util: var(--font-alegreya-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Títulos: Cinzel en negrita, no en negra ----
+   600 con tracking abierto se desinflaba; 900 se vuelve caricatura. 700 con
+   un interletraje mínimo da presencia sin perder la elegancia lapidaria. */
+.title-xl {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+  line-height: 1.12;
+}
+.title-lg {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  line-height: 1.18;
+}
+/* Rótulo de artículo: Cinzel en pequeño sí quiere algo de aire. */
+.label-caps {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+/* Antetítulos, como el «Serie» de las portadas. En las portadas van a gran
+   tamaño, donde el peso negro luce; a 15px se empasta. El color rojo ya le da
+   jerarquía de sobra, así que el peso puede ser ligero. */
+.kicker {
+  font-family: var(--font-sub);
+  font-weight: 500;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+.label-util {
+  font-family: var(--font-util);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* ---- Portada de entrada ----
+   Ocupa la pantalla exacta y nada más. Queda fijada, así que el contenido se
+   desliza por encima: la portada no se va, se destapa. `dvh` en vez de `vh`
+   porque en móvil la barra del navegador cambia de alto al hacer scroll y
+   `vh` dejaría la portada cortada. */
+.splash {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.25rem, 4vh, 2rem);
+  padding: clamp(1.5rem, 6vh, 4rem) 1.25rem clamp(1.5rem, 5vh, 3rem);
+  text-align: center;
+}
+.splash-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1rem, 3vh, 1.75rem);
+}
+.splash-logo img {
+  width: clamp(190px, 58vw, 360px);
+}
+.splash-quote {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+}
+.splash-cite {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: normal;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sage-deep);
+}
+.splash-tagline {
+  font-family: var(--font-sub);
+  font-style: italic;
+  font-size: clamp(0.98rem, 3.6vw, 1.12rem);
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 28rem;
+  margin: 0;
+  text-wrap: pretty;
+}
+/* Anclada abajo y sin `transform`, que lo usa la animación de entrada. */
+.splash-cue {
+  position: absolute;
+  bottom: clamp(1.25rem, 4vh, 2.5rem);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 0.62rem;
+  color: var(--ink-faint);
+}
+.splash-cue-line {
+  width: 1px;
+  height: clamp(1.75rem, 5vh, 2.75rem);
+  background: linear-gradient(var(--sage), transparent);
+}
+
+/* El contenido NO lleva fondo: sube por encima de la portada mientras ella
+   se desvanece. Un fondo opaco aquí convertiría la transición en un panel
+   tapando a otro, que es justo lo que no se quiere.
+   El primer bloque arranca con aire suficiente para no chocar con el
+   logotipo mientras éste todavía se ve. */
+.below-splash {
+  position: relative;
+  z-index: 1;
+  padding-top: clamp(3rem, 14vh, 8rem);
+}
+
+/* ---- Entrada de página ----
+   La misma gramática que la portada, en pequeño: así el documento y el panel
+   se sienten de la misma casa y no de otro sitio. Es entrada al cargar, no
+   revelado al hacer scroll: este bloque ya está en pantalla. */
+@media (prefers-reduced-motion: no-preference) {
+  .page-enter > * {
+    animation: splash-in 560ms var(--ease-out-strong) both;
+  }
+  .page-enter > *:nth-child(2) {
+    animation-delay: 90ms;
+  }
+  .page-enter > *:nth-child(3) {
+    animation-delay: 180ms;
+  }
+  .page-enter + * {
+    animation: splash-in 560ms var(--ease-out-strong) 260ms both;
+  }
+}
+
+/* ---- Entrada de la portada ----
+   Es el primer y único momento de la visita: aquí sí cabe algo de gracia. Va
+   escalonada para que el ojo llegue al logotipo primero. */
+@media (prefers-reduced-motion: no-preference) {
+  /* El logotipo entra desenfocado y se resuelve: para una iglesia que se
+     llama Luz Admirable, que la marca «enfoque» es el gesto que toca. */
+  .splash-logo {
+    animation: logo-focus 1100ms var(--ease-out-strong) 160ms both;
+  }
+  /* La cita se descubre de abajo arriba, como si se escribiera. */
+  .splash-quote {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+}
+.splash-cite {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: normal;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sage-deep);
+}
+.splash-tagline {
+    animation: line-reveal 900ms var(--ease-out-strong) 620ms both;
+  }
+  .splash-cue {
+    animation: splash-in 700ms var(--ease-out-strong) 1150ms both;
+  }
+  /* Y el filete se traza solo, al final de todo. */
+  .splash-cue-line {
+    transform-origin: 50% 0;
+    animation: draw-down 700ms var(--ease-drawer) 1350ms both;
+  }
+}
+
+/* ---- Pestaña de esquina, que se despliega en panel ----
+   El triángulo y el panel son la MISMA superficie: lo único que cambia es el
+   recorte. El vértice inferior del triángulo se desliza hasta la esquina y la
+   pestaña se convierte en el panel, sin mover ni escalar nada. Por eso los
+   dos recortes tienen cuatro vértices aunque el cerrado parezca un triángulo
+   — con distinto número de puntos el navegador no sabría interpolarlos. */
+.brand-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  /* Cerrado, solo la llama recibe el cursor: el resto del panel ocupa sitio
+     invisible y no debe capturar nada. */
+  pointer-events: none;
+  /* Volver es lo que el lector pidió al subir: curva de cajón, con empuje y
+     corta, porque está buscando algo. */
+  transition: transform 300ms var(--ease-drawer);
+}
+/* Irse no responde a nada que el lector haya pedido, así que puede tomarse su
+   tiempo y dejarse ver. Sin desvanecido: el deslizamiento ya la esconde del
+   todo, y una opacidad más corta que el recorrido apagaba la pestaña antes de
+   que terminara de salir — el tramo final se animaba sobre algo invisible. */
+.brand-nav[data-away] {
+  transition: transform 420ms var(--ease-out-strong);
+}
+/* Bajando se retira por el mismo vértice del que salió. Solo en pantallas
+   estrechas y en tabletas: en escritorio la columna va centrada y la pestaña
+   no le estorba a nada, así que se queda.
+
+   El recorrido es el ancho de la PESTAÑA, no el del panel: la caja mide 16.5rem
+   aunque solo se vea el triángulo de 5.75rem, y un -100% la mandaba tres veces
+   más lejos de lo necesario. El triángulo salía de pantalla en el primer tercio
+   y el resto del viaje ocurría a ciegas — de ahí que pareciera un corte seco en
+   vez de una salida. */
+@media (max-width: 63.99rem) {
+  .brand-nav[data-away] {
+    transform: translateX(calc(var(--tab-size) * -1));
+  }
+}
+.brand-nav-shell {
+  transform-origin: 0 0;
+  /* `drop-shadow` y no `box-shadow`: la sombra tiene que seguir la silueta
+     del recorte, no la caja. Y va en la capa de fuera porque el filtro se
+     aplica antes que el recorte — puesta en el propio panel, el recorte se
+     comería su propia sombra. */
+  filter: drop-shadow(0 2px 5px rgb(0 0 0 / 0.12))
+    drop-shadow(0 9px 20px rgb(0 0 0 / 0.07));
+}
+.brand-nav-panel {
+  width: var(--nav-w);
+  background: var(--sage);
+  clip-path: polygon(
+    0 0,
+    var(--tab-size) 0,
+    0 var(--tab-size),
+    0 var(--tab-size)
+  );
+  transition: clip-path 300ms var(--ease-drawer);
+}
+.brand-nav-trigger {
+  display: block;
+  position: relative;
+  width: var(--tab-size);
+  height: var(--tab-size);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.brand-nav-flame {
+  position: absolute;
+  top: 11%;
+  left: 9%;
+  width: 34%;
+  height: auto;
+}
+.brand-nav-body {
+  padding: 0.25rem 1.4rem 3.4rem;
+  opacity: 0;
+  transition: opacity 140ms linear;
+}
+.brand-nav-heading {
+  font-size: 0.64rem;
+  font-weight: 700;
+  color: var(--ink);
+  opacity: 0.55;
+  margin: 0 0 0.6rem;
+}
+.brand-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.brand-nav-link {
+  display: block;
+  font-family: var(--font-sub);
+  font-size: 1rem;
+  line-height: 1.3;
+  color: var(--ink);
+  padding: 0.4rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  transition: padding-left 160ms var(--ease-out-strong);
+}
+.brand-nav-list li:last-child .brand-nav-link {
+  border-bottom: 0;
+}
+
+/* Al entrar se despliega un cuarto y se recoge sola: enseña el gesto sin
+   explicarlo. Una vez por visita y nunca más. */
+.brand-nav[data-peek] .brand-nav-panel {
+  clip-path: polygon(0 0, 100% 0, 100% 24%, 0 44%);
+}
+
+/* Abierto, por cursor o por toque. Las dos vías comparten las mismas reglas. */
+.brand-nav:hover .brand-nav-panel,
+.brand-nav:focus-within .brand-nav-panel,
+.brand-nav[data-open] .brand-nav-panel {
+  /* Abierto conserva la diagonal en el borde inferior: el panel sigue siendo
+     una pestaña, no se convierte en un rectángulo cualquiera. */
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2.4rem), 0 100%);
+  pointer-events: auto;
+}
+.brand-nav:hover .brand-nav-body,
+.brand-nav:focus-within .brand-nav-body,
+.brand-nav[data-open] .brand-nav-body {
+  opacity: 1;
+  /* El texto entra cuando el panel ya tiene cuerpo, no a la vez. */
+  transition: opacity 200ms linear 120ms;
+}
+@media (hover: hover) and (pointer: fine) {
+  .brand-nav-link:hover {
+    padding-left: 0.4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-nav-panel,
+  .brand-nav-body,
+  .brand-nav-link {
+    transition-duration: 1ms;
+  }
+}
+
+/* ---- Movimiento ligado al scroll ----
+   Detrás de @supports: donde no haya timeline, el contenido se ve tal cual en
+   vez de quedarse en opacidad cero esperando. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /* La portada se apaga entera —pestaña incluida— mientras el texto sube.
+       Solo opacidad: debe quedarse quieta, cualquier desplazamiento delata
+       que son dos capas distintas. Atada al scroll de la página y no a la
+       vista del elemento, porque al ser `sticky` nunca sale de pantalla. */
+    .splash {
+      animation: splash-fade linear both;
+      animation-timeline: scroll(root block);
+      /* Cierra a los 40vh: para entonces el texto que sube todavía va por el
+         tercio inferior, así que nunca se cruza con el logotipo a media
+         opacidad. Alargarlo deja un fantasma encima del texto. */
+      animation-range: 0 40vh;
+    }
+
+    /* Tres tiempos al bajar desde la portada: primero crece la pestaña desde
+       el vértice, y cuando ya tiene cuerpo entra la llama. Separadas a
+       propósito: si salieran juntas no se leería la secuencia. */
+    .brand-nav[data-splash] .brand-nav-shell {
+      animation: tab-grow linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 8vh 46vh;
+    }
+    .brand-nav[data-splash] .brand-nav-flame {
+      animation: flame-in linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 38vh 64vh;
+    }
+
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 8% entry 58%;
+    }
+    .reveal[data-delay="2"] {
+      animation-range: entry 14% entry 70%;
+    }
+    .reveal[data-delay="3"] {
+      animation-range: entry 20% entry 82%;
+    }
+
+    /* Los títulos se descubren de arriba abajo, como si se escribieran. */
+    .text-reveal {
+      animation: text-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 12% entry 62%;
+    }
+  }
+}
+
+/* Menos movimiento: se conserva el desvanecido, que ayuda a entender el
+   cambio de estado, y se quitan los desplazamientos. */
+@keyframes tab-grow {
+  from {
+    transform: scale(0.08);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes flame-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes logo-focus {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+@keyframes line-reveal {
+  from {
+    opacity: 0;
+    /* El recorte final se pasa de los bordes para no cortar tildes ni rabos. */
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(-30% -30% -30% -30%);
+    transform: none;
+  }
+}
+@keyframes draw-down {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+@keyframes splash-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.9rem) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes splash-fade {
+  to {
+    opacity: 0;
+  }
+}
+/* El recorte final se pasa de los bordes para no cortar tildes ni rabos. */
+@keyframes text-reveal {
+  from {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0.35;
+    transform: translateY(0.4rem);
+  }
+  to {
+    clip-path: inset(-25% -25% -25% -25%);
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* El panel lleva la misma pestaña, más discreta: es zona de trabajo. */
+.admin-bar {
+  position: relative;
+  overflow: hidden;
+}
+.admin-tab {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4.25rem;
+  aspect-ratio: 1;
+  background: var(--sage);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  pointer-events: none;
+}
+
+/* ---- Columna de lectura ----
+   Un ancho fijo no basta: 48rem son justo los 768px del iPad en vertical, así
+   que la columna se comía los márgenes y el texto quedaba pegado a los bordes.
+   Lo correcto es poner tope a la MEDIDA y dejar que la gotera escale con la
+   pantalla, para que siempre haya margen visible.
+
+     móvil  390px → 23px de gotera → ~33 caracteres
+     iPad   768px → 46px de gotera → ~64 caracteres
+     escritorio   → 56px de gotera → ~68 caracteres
+
+   El rango cómodo de lectura continua es 45–75 caracteres. */
+.doc-column {
+  max-width: 52rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 6vw, 3.5rem);
+}
+
+/* ---- Títulos de capítulo fijados ----
+   Mientras se lee un capítulo largo, su rótulo se queda arriba: en un texto
+   normativo saber en qué capítulo vas es orientación, no adorno.
+
+   El aire va dentro como relleno, no como hueco por encima: si fuera un hueco,
+   el texto se vería pasar por esa franja. */
+.chapter-pin {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--paper);
+  padding-top: 0.85rem;
+  padding-bottom: 0.9rem;
+}
+
+/* En pantallas estrechas la columna de lectura llega hasta el borde y el
+   vértice de la pestaña se le echaría encima al rótulo. En vez de empujarlo
+   hacia abajo —que lo dejaba descolgado a media altura— se aparta a la
+   derecha, y solo mientras la pestaña está ahí. Se mueve el contenido, no la
+   caja: así el fondo sigue tapando de borde a borde. */
+/* Dónde hace falta apartar el rótulo: donde la pestaña lo alcanza.
+   El texto arranca en `(ancho − 52rem)/2 + gotera`, y a la altura del
+   antetítulo el triángulo llega a unos 62px. Las dos curvas se cruzan cerca
+   de los 850px, así que el corte va en 56rem con holgura.
+
+     iPhone 390 → el texto arranca en 23px  → choca
+     iPad   768 → arranca en 46px           → choca
+     iPad  1024 → arranca en 152px          → libra de sobra
+
+   Por eso en iPad vertical sí se aparta y en horizontal no: ahí sangrar el
+   rótulo solo lo desalinearía del cuerpo sin motivo. */
+@media (max-width: 55.99rem) {
+  /* El rótulo mide exactamente lo que la pestaña y se alinea con ella: así
+     parece que el título sale de la pestaña, no que flota a su lado. */
+  .chapter-pin {
+    min-height: var(--tab-size);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  /* El hueco va como relleno de la caja, no como `transform` del contenido:
+     un desplazamiento mueve el texto sin estrecharlo, y el título se salía
+     por la derecha en vez de partir de línea. Aquí el texto tiene que
+     reflúir, así que toca el espaciado. */
+  .chapter-pin {
+    transition: padding-left 260ms var(--ease-out-strong);
+  }
+  /* Solo el que está pegado arriba: es el único al que la pestaña alcanza.
+     Los demás van en el flujo y deben arrancar alineados con el cuerpo. */
+  :root[data-tab="here"] .chapter-pin[data-stuck] {
+    padding-left: 3.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-nav,
+  .chapter-pin {
+    transition: none;
+  }
+}
+
+/* ---- Cuerpo de los artículos: HTML generado por Tiptap ----
+   Kingred es una display: en párrafo necesita más interlínea de lo normal
+   para que los descendentes no choquen con la línea siguiente. */
+.doc-body {
+  font-size: 1.0625rem;
+  line-height: 1.78;
+  color: var(--ink-soft);
+}
+.doc-body > * + * {
+  margin-top: 0.9rem;
+}
+.doc-body strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+.doc-body em {
+  font-style: italic;
+}
+/* El subrayado es la convención de énfasis del tratado. Se tiñe de salvia y
+   se despega de la línea base para que nadie lo lea como un enlace. */
+.doc-body u {
+  text-decoration-color: var(--sage);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.22em;
+}
+.doc-body ul,
+.doc-body ol {
+  padding-left: 1.5rem;
+}
+.doc-body ul {
+  list-style: disc;
+}
+.doc-body ol {
+  list-style: decimal;
+}
+.doc-body li + li {
+  margin-top: 0.4rem;
+}
+.doc-body blockquote {
+  border-left: 2px solid var(--sage);
+  padding-left: 1rem;
+  font-family: var(--font-sub);
+  font-style: italic;
+}
+
+/* ---- Editor Tiptap en el panel ---- */
+.ProseMirror {
+  min-height: 11rem;
+  outline: none;
+}
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--ink-faint);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
 }
