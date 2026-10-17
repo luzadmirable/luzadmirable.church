@@ -119,14 +119,20 @@ body {
 
 /* ---- Portada de entrada ----
    Ocupa la pantalla exacta y nada más. Queda fijada, así que el contenido se
-   desliza por encima: la portada no se va, se destapa. `dvh` en vez de `vh`
-   porque en móvil la barra del navegador cambia de alto al hacer scroll y
-   `vh` dejaría la portada cortada. */
+   desliza por encima: la portada no se va, se destapa.
+
+   `svh` y no `dvh`: `dvh` se recalcula mientras la barra del navegador móvil
+   se colapsa al bajar, y como de esta portada depende el alto del documento,
+   el scroll se reajustaba a media mordida y parecía rebotar. `svh` es el alto
+   estable con la barra visible, así que no cambia nunca durante el scroll. Y
+   tampoco corta la portada: la que cortaría es `vh`, que equivale al alto
+   grande. Cuando la barra se esconde sobra un poco de papel abajo, invisible
+   porque el contenido ya viene deslizándose encima. */
 .splash {
   position: sticky;
   top: 0;
   z-index: 0;
-  height: 100dvh;
+  height: 100svh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
