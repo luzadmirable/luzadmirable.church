@@ -207,6 +207,33 @@ body {
   padding-top: clamp(3rem, 14vh, 8rem);
 }
 
+/* ---- Flecha de los renglones de la portada ----
+   Discreta en reposo pero presente: es lo único que distingue la lista de un
+   índice impreso. Se mueve lo justo —tres milímetros— porque el gesto es un
+   asentimiento, no un salto. */
+.doc-arrow {
+  flex-shrink: 0;
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--sage-deep);
+  transition:
+    transform 220ms var(--ease-out-strong),
+    color 160ms ease-out;
+}
+.group:hover .doc-arrow {
+  transform: translateX(0.3rem);
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doc-arrow {
+    transition-duration: 1ms;
+  }
+  .group:hover .doc-arrow {
+    transform: none;
+  }
+}
+
 /* ---- Entrada de página ----
    La misma gramática que la portada, en pequeño: así el documento y el panel
    se sienten de la misma casa y no de otro sitio. Es entrada al cargar, no

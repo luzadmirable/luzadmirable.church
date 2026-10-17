@@ -48,16 +48,33 @@ export default async function HomePage() {
                   <Reveal delay={index === 0 ? undefined : 2}>
                     <Link
                       href={`/${doc.slug}`}
-                      className="group flex flex-col gap-1 py-6 transition-colors hover:bg-surface"
+                      className="group flex items-center gap-4 py-6 transition-colors hover:bg-surface active:bg-surface sm:gap-8"
                     >
-                      <h2 className="title-lg text-[1.2rem] text-ink transition-colors group-hover:text-accent">
-                        {doc.title}
-                      </h2>
-                      {doc.subtitle ? (
-                        <p className="font-sub text-ink-soft italic">
-                          {doc.subtitle}
-                        </p>
-                      ) : null}
+                      <div className="flex flex-1 flex-col gap-1">
+                        <h2 className="title-lg text-[1.2rem] text-ink transition-colors group-hover:text-accent">
+                          {doc.title}
+                        </h2>
+                        {doc.subtitle ? (
+                          <p className="font-sub text-ink-soft italic">
+                            {doc.subtitle}
+                          </p>
+                        ) : null}
+                      </div>
+                      {/* La única pista de que el renglón lleva a algún sitio.
+                          Tiene que verse en reposo: en el teléfono no hay
+                          cursor que revele nada al pasar por encima. */}
+                      <svg
+                        className="doc-arrow"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.25"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M4 12h15M13 6l6 6-6 6" />
+                      </svg>
                     </Link>
                   </Reveal>
                 </li>
