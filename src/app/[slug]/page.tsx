@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { DocumentDownload } from "@/components/DocumentDownload";
 import { DocumentOutline } from "@/components/DocumentOutline";
 import { DocumentSections } from "@/components/DocumentSections";
 import { BrandTab } from "@/components/BrandTab";
@@ -54,6 +55,15 @@ async function DocumentContents({ params }: Params) {
           </p>
         ) : null}
       </header>
+
+      {doc.attachmentPath ? (
+        <div className="mt-8">
+          <DocumentDownload
+            path={doc.attachmentPath}
+            label={doc.attachmentLabel ?? "Descargar anexo"}
+          />
+        </div>
+      ) : null}
 
       <div className="mt-10">
         <DocumentOutline tree={tree} />

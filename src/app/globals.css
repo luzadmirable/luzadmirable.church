@@ -207,6 +207,95 @@ body {
   padding-top: clamp(3rem, 14vh, 8rem);
 }
 
+/* ---- Anexo descargable ----
+   Un bloque, no un botón suelto: lo que importa es qué se lleva el lector,
+   así que el nombre del archivo pesa más que la palabra «descargar». El
+   borde en salvia lo emparenta con el índice, que es el otro recuadro del
+   documento. */
+.doc-download {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--sage);
+  background: var(--surface-2);
+  padding: 0.95rem 1.1rem;
+  text-decoration: none;
+  transition:
+    border-color 180ms ease-out,
+    background-color 180ms ease-out;
+}
+.doc-download:hover {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+.doc-download-icon {
+  flex-shrink: 0;
+  width: 1.4rem;
+  height: 1.4rem;
+  color: var(--sage-deep);
+  transition:
+    transform 240ms var(--ease-out-strong),
+    color 180ms ease-out;
+}
+.doc-download:hover .doc-download-icon {
+  transform: translateY(0.16rem);
+  color: var(--accent);
+}
+.doc-download-text {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.12rem;
+}
+.doc-download-label {
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 0.98rem;
+  line-height: 1.3;
+  color: var(--ink);
+}
+.doc-download-meta {
+  font-family: var(--font-util);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.doc-download-cue {
+  flex-shrink: 0;
+  font-family: var(--font-util);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sage-deep);
+  transition: color 180ms ease-out;
+}
+.doc-download:hover .doc-download-cue {
+  color: var(--accent);
+}
+
+/* En pantalla estrecha la palabra «descargar» sobra: el icono ya lo dice y
+   el nombre del archivo necesita el ancho. */
+@media (max-width: 29.99rem) {
+  .doc-download-cue {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doc-download,
+  .doc-download-icon,
+  .doc-download-cue {
+    transition-duration: 1ms;
+  }
+  .doc-download:hover .doc-download-icon {
+    transform: none;
+  }
+}
+
 /* ---- Flecha de los renglones de la portada ----
    Discreta en reposo pero presente: es lo único que distingue la lista de un
    índice impreso. Se mueve lo justo —tres milímetros— porque el gesto es un

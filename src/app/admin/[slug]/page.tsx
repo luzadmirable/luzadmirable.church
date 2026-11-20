@@ -53,7 +53,7 @@ export default async function EditDocumentPage({ params, searchParams }: Props) 
 
       <form
         action={updateDocumentForm}
-        className="mt-6 grid items-end gap-3 border border-rule bg-surface p-4 sm:grid-cols-[1fr_1fr_1fr_auto]"
+        className="mt-6 grid items-end gap-3 border border-rule bg-surface p-4 sm:grid-cols-3 lg:grid-cols-[1fr_1fr_1fr_1fr_1fr_auto]"
       >
         <input type="hidden" name="slug" value={doc.slug} />
         <label className="flex flex-col gap-1.5">
@@ -86,6 +86,28 @@ export default async function EditDocumentPage({ params, searchParams }: Props) 
             name="byline"
             defaultValue={doc.byline ?? ""}
             placeholder="Pr. Nombre · Mes Año"
+            className="border border-rule bg-paper px-3 py-2 text-sm text-ink outline-none focus:border-accent"
+          />
+        </label>
+        <label className="flex flex-col gap-1.5">
+          <span className="label-util text-[0.64rem] text-ink-faint">
+            Anexo · ruta
+          </span>
+          <input
+            name="attachmentPath"
+            defaultValue={doc.attachmentPath ?? ""}
+            placeholder="/descargas/archivo.pdf"
+            className="border border-rule bg-paper px-3 py-2 text-sm text-ink outline-none focus:border-accent"
+          />
+        </label>
+        <label className="flex flex-col gap-1.5">
+          <span className="label-util text-[0.64rem] text-ink-faint">
+            Anexo · nombre
+          </span>
+          <input
+            name="attachmentLabel"
+            defaultValue={doc.attachmentLabel ?? ""}
+            placeholder="Solicitud de membresía"
             className="border border-rule bg-paper px-3 py-2 text-sm text-ink outline-none focus:border-accent"
           />
         </label>

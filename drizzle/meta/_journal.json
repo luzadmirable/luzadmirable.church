@@ -15,6 +15,13 @@
       "when": 1792099437837,
       "tag": "0001_public_madrox",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795135488089,
+      "tag": "0002_clean_sally_floyd",
+      "breakpoints": true
     }
   ]
 }

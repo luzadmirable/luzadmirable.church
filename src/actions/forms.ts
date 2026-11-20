@@ -42,6 +42,8 @@ export async function updateDocumentForm(formData: FormData): Promise<void> {
   const title = String(formData.get("title") ?? "").trim();
   const subtitle = String(formData.get("subtitle") ?? "").trim();
   const byline = String(formData.get("byline") ?? "").trim();
+  const attachmentPath = String(formData.get("attachmentPath") ?? "").trim();
+  const attachmentLabel = String(formData.get("attachmentLabel") ?? "").trim();
 
   if (!title) return;
 
@@ -51,6 +53,8 @@ export async function updateDocumentForm(formData: FormData): Promise<void> {
       title,
       subtitle: subtitle || null,
       byline: byline || null,
+      attachmentPath: attachmentPath || null,
+      attachmentLabel: attachmentLabel || null,
       updatedAt: new Date(),
     })
     .where(eq(documents.slug, slug));

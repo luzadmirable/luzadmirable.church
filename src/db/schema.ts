@@ -19,6 +19,14 @@ export const documents = pgTable("documents", {
   subtitle: text("subtitle"),
   /** Autoría y fecha. Un tratado lleva firma; un estatuto no. */
   byline: text("byline"),
+  /**
+   * Anexo descargable: la ruta pública del archivo y cómo llamarlo en el
+   * botón. La membresía lleva su solicitud; otros documentos pueden no
+   * llevar nada. Se guarda la ruta y no el archivo: los PDF viven en
+   * `public/descargas` y se despliegan con el sitio.
+   */
+  attachmentPath: text("attachment_path"),
+  attachmentLabel: text("attachment_label"),
   position: integer("position").notNull().default(0),
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .notNull()
